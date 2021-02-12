@@ -47,7 +47,15 @@ function drawScreen(){
   Context.drawImage(imgSlider, 10, 60, 140, 9);
   Context.drawImage(imgCtrlSlider, 10, 55);
 
-  Context.drawImage(imgSlider, 160, 60, 60, 9);
+  Context.save(); //저장
+  //이 사이에서 행렬 변환과 그리기를 처리
+  Context.translate(160 + 9, 60);
+
+  var radian = 90 * (Math.PI / 180);
+  Context.rotate(radian);
+
+  Context.drawImage(imgSlider, 0, 0, 60, 9);
+  Context.restore(); //복구
   Context.drawImage(imgCtrlSlider, 160 - 5, 55);
 
 }
