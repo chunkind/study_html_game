@@ -1,4 +1,5 @@
 window.addEventListener("load", drawScreen, false);
+window.addEventListener("click", onClicked, false);
 
 var nowResourceLoadedCount = 0; // 현재 로딩된 리소스 수
 var intAllResourceCount = 6; //로딩할 리소스 수
@@ -30,6 +31,25 @@ imgSlider.addEventListener("load", onResourceLoaded, false);
 
 var isPlayNow = false; //재생 여부
 
+function onClicked(e){
+  var theCanvas = document.getElementById("GameCanvas");
+  var intMouseX = e.clientX - theCanvas.offsetLeft;
+  var intMouseY = e.clientY - theCanvas.offsetTop;
+
+  //재생 버튼의 영역과 비교
+  if(60 < intMouseX && 80 < intMouseY && 
+      60 + 41 > intMouseX && 80 + 41 > intMouseY){
+      //소리 실행
+      if(isPlayNow){
+        isPlayNow = false;
+      }else{
+        isPlayNow = true;
+      }
+      drawScreen();
+  }
+
+}
+
 function drawScreen(){
   var theCanvas = document.getElementById("GameCanvas");
   var Context = theCanvas.getContext("2d");
@@ -45,7 +65,7 @@ function drawScreen(){
   Context.drawImage(imgBtnNext, 110, 80);
 
   Context.drawImage(imgSlider, 10, 60, 140, 9);
-  Context.drawImage(imgCtrlSlider, 10, 55);
+  Context.drawImage(imgCtrlSlider, 10, 60 - 5);
 
   Context.save(); //저장
   //이 사이에서 행렬 변환과 그리기를 처리
@@ -54,7 +74,9 @@ function drawScreen(){
   var radian = 90 * (Math.PI / 180);
   Context.rotate(radian);
 
-  Context.drawImage(imgSlider, 0, 0, 60, 9);
+  Context.scale(60/44, 1);
+  Context.drawImage(imgSlider, 0, 0);
+
   Context.restore(); //복구
   Context.drawImage(imgCtrlSlider, 160 - 5, 55);
 
