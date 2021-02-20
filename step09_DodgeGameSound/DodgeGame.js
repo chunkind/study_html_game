@@ -1,5 +1,6 @@
 window.addEventListener("load", drawScreen, false);
 window.addEventListener("keydown", onkeydown, false);
+window.addEventListener("keyup", onKeyUp, false);
 
 var GAME_STATE_READY = 0; // 준비
 var GAME_STATE_GAME = 1;  // 게임 중
@@ -29,6 +30,8 @@ var intPlayerY = 250;
 var speed = 5;
 
 var intTime = 0; //플레이 시간을 저장할 변수
+
+var isKeyPressed = [];
 
 function drawScreen(){
     var theCanvas = document.getElementById("GameCanvas");
@@ -73,53 +76,11 @@ function drawScreen(){
 }
 
 function onkeydown(e){
-    console.log("GameState : " + GameState + ", keyCode : " + e.keyCode);
-    //준비 중
-    if(GameState == GAME_STATE_READY){
-        //게임 시작
-        if(e.keyCode == 13){
-            onGameStart();
-        }
-    }
-    //게임 중
-    else if(GameState == GAME_STATE_GAME){
-        switch(e.keyCode){
-            case 37: //left
-                intPlayerX-=speed;
-                if(intPlayerX < 0){
-                    intPlayerX = 0;
-                }
-                break;
-            case 39: //Right
-                intPlayerX+=speed;
-                if(intPlayerX > 740){
-                    intPlayerX = 740;
-                }
-                break;
-            case 38: //Up
-                intPlayerY-=speed;
-                if(intPlayerY < 0){
-                    intPlayerY = 0;
-                }
-                break;
-            case 40: //Down
-                intPlayerY+=speed;
-                if(intPlayerY > 540){
-                    intPlayerY = 540;
-                }
-                break;
-        }
-    }
-    //게임 오버
-    else if(GameState == GAME_STATE_OVER){
-        //게임 준비 상태로 변경
-        if(e.keyCode == 13){
-            //엔터를 입력하면 준비 상태로
-            onReady();
-        }
-    }
-    //화면 갱신
-    drawScreen();
+    this.isKeyPressed[e.keyCode] = true;
+}
+
+function onKeyUp(e){
+    this.isKeyPressed[e.keyCode] = false;
 }
 
 function RandomNextInt(max){
@@ -189,6 +150,52 @@ function onReady(){
 }
 
 function InGameUpdate(){
+    //준비 중
+    if(GameState == GAME_STATE_READY){
+        //게임 시작
+        if(isKeyDown(13)){
+            onGameStart();
+        }
+    }
+    //게임 중
+    else if(GameState == GAME_STATE_GAME){
+        if(isKeyDown(37)){ //left
+            intPlayerX-=speed;
+            if(intPlayerX < 0){
+                intPlayerX = 0;
+            }
+        }
+
+        if(isKeyDown(39)){ //Right
+            intPlayerX+=speed;
+            if(intPlayerX > 740){
+                intPlayerX = 740;
+            }
+        }
+
+        if(isKeyDown(38)){ //Up
+            intPlayerY-=speed;
+            if(intPlayerY < 0){
+                intPlayerY = 0;
+            }
+        }
+
+        if(isKeyDown(40)){ //Down
+            intPlayerY+=speed;
+            if(intPlayerY > 540){
+                intPlayerY = 540;
+            }
+        }
+    }
+    //게임 오버
+    else if(GameState == GAME_STATE_OVER){
+        //게임 준비 상태로 변경
+        if(isKeyDown(13)){
+            //엔터를 입력하면 준비 상태로
+            onReady();
+        }
+    }
+    
     //시간 체크
     intTime += 100;
 
@@ -229,6 +236,9 @@ function InGameUpdate(){
 
     //총알 이동 처리
     MoveMissile();
+
+    //화면 갱신
+    drawScreen();
 }
 
 function MoveMissile(){
@@ -273,9 +283,6 @@ function MoveMissile(){
             };
         }
     }
-
-    // 화면 갱신
-    drawScreen();
 }
 
 function IsCollisionWithPlayer(x, y){
@@ -286,4 +293,12 @@ function IsCollisionWithPlayer(x, y){
         return true;
     }
     return false;
+}
+
+
+function isKeyDown(keyCode){
+    if(this.isKeyPressed[keyCode] == true)
+        return true;
+    else
+        return false;
 }
