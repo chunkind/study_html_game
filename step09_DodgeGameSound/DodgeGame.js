@@ -300,16 +300,16 @@ function IsCollisionWithPlayer(x, y){
     var isRight = false;
     var isTop = false;
     var isBottom = false;
-    if(intPlayerX + 55 > x + 5){
-        isLeft = true;
-    }
-    if(intPlayerX + 5 < x + 55){
+    if(intPlayerX + 50 > x + 5){
         isRight = true;
     }
-    if(intPlayerY + 5 < y + 55){
+    if(intPlayerX + 5 < x + 15){
+        isLeft = true;
+    }
+    if(intPlayerY + 0 < y + 10){
         isBottom = true;
     }
-    if(intPlayerY + 55 > y + 5){
+    if(intPlayerY + 50 > y + 5){
         isTop = true;
     }
 
