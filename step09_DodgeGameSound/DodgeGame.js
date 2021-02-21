@@ -57,13 +57,13 @@ function drawScreen(){
     //게임 중
     else if(GameState == GAME_STATE_GAME){
         for(var i=0; i<arrMissiles.length; i++){
-            Context.drawImage(imgMissile, arrMissiles[i].x, arrMissiles[i].y);
+            Context.drawImage(imgMissile, arrMissiles[i].x, arrMissiles[i].y, 25, 25);
         }
     }
     //게임 오버
     else if(GameState == GAME_STATE_OVER){
         for(var i=0; i<arrMissiles.length; i++){
-            Context.drawImage(imgMissile, arrMissiles[i].x, arrMissiles[i].y);
+            Context.drawImage(imgMissile, arrMissiles[i].x, arrMissiles[i].y, 25, 25);
         }
         Context.fillText("게임 오버", 330, 180);
     }
@@ -76,7 +76,28 @@ function drawScreen(){
 }
 
 function onkeydown(e){
-    this.isKeyPressed[e.keyCode] = true;
+    console.log("call onkeydown... : " + GameState)
+    //준비 중
+    if(GameState == GAME_STATE_READY){
+        //게임 시작
+        if(e.keyCode == 13){
+            onGameStart();
+        }
+    }
+    //게임 중
+    else if(GameState == GAME_STATE_GAME){
+        this.isKeyPressed[e.keyCode] = true;
+    }
+    //게임 오버
+    else if(GameState == GAME_STATE_OVER){
+        console.log("gameover cal..")
+        //게임 준비 상태로 변경
+        if(e.keyCode == 13){
+            //엔터를 입력하면 준비 상태로
+            onReady();
+        }
+    }
+
 }
 
 function onKeyUp(e){
@@ -90,7 +111,7 @@ function RandomNextInt(max){
 //게임 시작
 function onGameStart(){
     GameState = GAME_STATE_GAME;
-    intervalId = setInterval(InGameUpdate, 100);
+    intervalId = setInterval(InGameUpdate, 1000/20);
 
     //초기 총알 랜덤 생성
     for(var i=0; i<50; i++){
@@ -147,55 +168,10 @@ function onReady(){
     while(arrMissiles.length != 0){
         arrMissiles.pop();
     }
+    drawScreen();
 }
 
 function InGameUpdate(){
-    //준비 중
-    if(GameState == GAME_STATE_READY){
-        //게임 시작
-        if(isKeyDown(13)){
-            onGameStart();
-        }
-    }
-    //게임 중
-    else if(GameState == GAME_STATE_GAME){
-        if(isKeyDown(37)){ //left
-            intPlayerX-=speed;
-            if(intPlayerX < 0){
-                intPlayerX = 0;
-            }
-        }
-
-        if(isKeyDown(39)){ //Right
-            intPlayerX+=speed;
-            if(intPlayerX > 740){
-                intPlayerX = 740;
-            }
-        }
-
-        if(isKeyDown(38)){ //Up
-            intPlayerY-=speed;
-            if(intPlayerY < 0){
-                intPlayerY = 0;
-            }
-        }
-
-        if(isKeyDown(40)){ //Down
-            intPlayerY+=speed;
-            if(intPlayerY > 540){
-                intPlayerY = 540;
-            }
-        }
-    }
-    //게임 오버
-    else if(GameState == GAME_STATE_OVER){
-        //게임 준비 상태로 변경
-        if(isKeyDown(13)){
-            //엔터를 입력하면 준비 상태로
-            onReady();
-        }
-    }
-    
     //시간 체크
     intTime += 100;
 
@@ -237,8 +213,41 @@ function InGameUpdate(){
     //총알 이동 처리
     MoveMissile();
 
+    //캐릭터 이동 처리
+    MoveCharator();
+
     //화면 갱신
     drawScreen();
+}
+
+function MoveCharator(){
+    if(isKeyDown(37)){ //left
+        intPlayerX-=speed;
+        if(intPlayerX < 0){
+            intPlayerX = 0;
+        }
+    }
+
+    if(isKeyDown(39)){ //Right
+        intPlayerX+=speed;
+        if(intPlayerX > 740){
+            intPlayerX = 740;
+        }
+    }
+
+    if(isKeyDown(38)){ //Up
+        intPlayerY-=speed;
+        if(intPlayerY < 0){
+            intPlayerY = 0;
+        }
+    }
+
+    if(isKeyDown(40)){ //Down
+        intPlayerY+=speed;
+        if(intPlayerY > 540){
+            intPlayerY = 540;
+        }
+    }
 }
 
 function MoveMissile(){
@@ -286,12 +295,36 @@ function MoveMissile(){
 }
 
 function IsCollisionWithPlayer(x, y){
-    if(intPlayerX + 55 > x + 5 &&
-        intPlayerX + 5 < x + 55 &&
-        intPlayerY + 5 < y + 55 &&
-        intPlayerY + 55 > y + 5){
+    //디버그용
+    var isLeft = false;
+    var isRight = false;
+    var isTop = false;
+    var isBottom = false;
+    if(intPlayerX + 55 > x + 5){
+        isLeft = true;
+    }
+    if(intPlayerX + 5 < x + 55){
+        isRight = true;
+    }
+    if(intPlayerY + 5 < y + 55){
+        isBottom = true;
+    }
+    if(intPlayerY + 55 > y + 5){
+        isTop = true;
+    }
+
+    if(isLeft && isRight && isTop && isBottom){
+        console.log("intPlayerX :" + intPlayerX + ", intPlayerY :" + intPlayerY + ", x :" + x + ", y :" + y);
         return true;
     }
+
+    // if(intPlayerX + 55 > x + 5 &&
+    //     intPlayerX + 5 < x + 55 &&
+    //     intPlayerY + 5 < y + 55 &&
+    //     intPlayerY + 55 > y + 5){
+    //     return true;
+    // }
+
     return false;
 }
 
