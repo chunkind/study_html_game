@@ -4,7 +4,7 @@ var temp_text_x = 400;
 var temp_text_y = 300;
 
 function onPageLoadComplete(){
-    var FPS = 30;
+    var FPS = 100;
 
     setInterval(gameLoop, 1000/FPS);
 }
