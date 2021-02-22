@@ -27,7 +27,8 @@ imgMissile.src = "img/missile.png";
 var intPlayerX = 350;
 var intPlayerY = 250;
 
-var speed = 5;
+var fps = 25;
+var speed = 7;
 
 var intTime = 0; //플레이 시간을 저장할 변수
 
@@ -44,7 +45,7 @@ function drawScreen(){
     Context.drawImage(imgBackground, 0, 0);
 
     //플레이어 그리기
-    Context.drawImage(imgPlayer, intPlayerX, intPlayerY);
+    Context.drawImage(imgPlayer, intPlayerX, intPlayerY, 30, 30);
 
     Context.fillStyle = "#ffffff";
     Context.font = "50px Arial";
@@ -57,13 +58,13 @@ function drawScreen(){
     //게임 중
     else if(GameState == GAME_STATE_GAME){
         for(var i=0; i<arrMissiles.length; i++){
-            Context.drawImage(imgMissile, arrMissiles[i].x, arrMissiles[i].y, 25, 25);
+            Context.drawImage(imgMissile, arrMissiles[i].x, arrMissiles[i].y, 10, 10);
         }
     }
     //게임 오버
     else if(GameState == GAME_STATE_OVER){
         for(var i=0; i<arrMissiles.length; i++){
-            Context.drawImage(imgMissile, arrMissiles[i].x, arrMissiles[i].y, 25, 25);
+            Context.drawImage(imgMissile, arrMissiles[i].x, arrMissiles[i].y, 10, 10);
         }
         Context.fillText("게임 오버", 330, 180);
     }
@@ -111,7 +112,7 @@ function RandomNextInt(max){
 //게임 시작
 function onGameStart(){
     GameState = GAME_STATE_GAME;
-    intervalId = setInterval(InGameUpdate, 1000/20);
+    intervalId = setInterval(InGameUpdate, 1000/fps);
 
     //초기 총알 랜덤 생성
     for(var i=0; i<50; i++){
@@ -300,16 +301,16 @@ function IsCollisionWithPlayer(x, y){
     var isRight = false;
     var isTop = false;
     var isBottom = false;
-    if(intPlayerX + 50 > x + 5){
+    if(intPlayerX + 20 > x + 2){
         isRight = true;
     }
-    if(intPlayerX + 5 < x + 15){
+    if(intPlayerX + 2 < x + 8){
         isLeft = true;
     }
-    if(intPlayerY + 0 < y + 10){
+    if(intPlayerY + 2 < y + 8){
         isBottom = true;
     }
-    if(intPlayerY + 50 > y + 5){
+    if(intPlayerY + 28 > y + 2){
         isTop = true;
     }
 
