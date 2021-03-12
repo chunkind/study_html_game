@@ -6,9 +6,9 @@ var temp_text_y = 300;
 function onPageLoadComplete(){
     var FPS = 30;
 
-    soundSystem.AddSound("test_shoot.mp3");
+    soundSystem.AddSound("test_shoot.mp3", 2);
     setInterval(gameLoop, 1000/FPS);
-    setInterval(TestSoundSystem, 100);
+    // setInterval(TestSoundSystem, 100);
 }
 
 function TestSoundSystem(){
