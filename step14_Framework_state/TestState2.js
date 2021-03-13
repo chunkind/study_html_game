@@ -1,4 +1,6 @@
 function TestState2(){
+    this.imgTest = new Image();
+    this.imgTest.src = "teststate2.png";
     return this;
 }
 
@@ -10,5 +12,5 @@ TestState2.prototype.Render = function(){
     var theCanvas = document.getElementById("GameCanvas");
     var Context = theCanvas.getContext("2d");
 
-    
+    Context.drawImage(this.imgTest, 300, 200);
 }

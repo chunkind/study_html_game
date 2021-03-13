@@ -3,7 +3,10 @@ function TestState1(){
 }
 
 TestState1.prototype.Update = function(){
-
+    if(inputSystem.isKeyDown(13)){
+        // game_state = new TestState2();
+        ChangeGameState(new TestState2());
+    }
 }
 
 TestState1.prototype.Render = function(){
