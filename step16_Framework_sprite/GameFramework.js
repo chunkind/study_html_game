@@ -3,10 +3,10 @@ window.addEventListener("mousedown", onMouseDown, false);
 window.addEventListener("mouseup", onMouseUp, false);
 
 var game_state;
+var GAME_FPS = 30;
 
-function onPageLoadComplete(){
-    var FPS = 30;
-    setInterval(gameLoop, 1000/FPS);
+function onPageLoadComplete(){    
+    setInterval(gameLoop, 1000/GAME_FPS);
 
     //게임 초기 시작 상태 설정
     game_state = new TestState();
@@ -67,9 +67,8 @@ function gameLoop(){
 //테스트용 임시 상태
 function TestState(){
     var test_img = new Image();
-    test_img.src = "test_img.png";
-    this.testObject = new GraphicObject(test_img);
-    this.testObject.SetPosition(200, 20);
+    test_img.src = "walk.png";
+    this.testObject = new SpriteAnimation(test_img, 125, 167, 4, 4);
     return this;
 }
 TestState.prototype.Render = function(){
@@ -79,5 +78,5 @@ TestState.prototype.Render = function(){
     this.testObject.Render(Context);
 }
 TestState.prototype.Update = function(){
-    this.testObject.Translate(1, 1);
+    this.testObject.Update();
 }
