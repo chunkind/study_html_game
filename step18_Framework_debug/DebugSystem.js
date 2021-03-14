@@ -1,8 +1,14 @@
 function DebugSystem(){
+    this.debugMode = false;
+    this.useAlert = true;
     return this;
 }
 
 DebugSystem.prototype.Log = function(type, msg){
+
+    if(this.debugMode == false)
+        return;
+
     if(typeof console == undefined)
         return;
     
@@ -14,9 +20,16 @@ DebugSystem.prototype.Log = function(type, msg){
             console.warn(msg);
             break;
         case "ERROR":
+            if(this.useAlert)
+                alert(msg);
             console.error(msg);
             break;
     }
+}
+
+DebugSystem.prototype.UseDebugMode = function(){
+    if(inputSystem.isKeyDown(27) && inputSystem.isKeyDown(32))
+        this.debugMode = !this.debugMode;
 }
 
 var debugSystem = new DebugSystem();

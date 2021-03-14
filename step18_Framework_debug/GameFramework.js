@@ -8,26 +8,12 @@ var game_state;
 
 //테스트용 임시 상태
 function TestState(){
-
-    // var test_img = new Image();
-    // test_img.src = "walk.png";
-    // this.testObject = new SpriteAnimation(test_img, 125, 167, 4, 4);
-
-    // resourcePreLoader.AddImage("walk.png")
+    console.log("console.log()");
+    debugSystem.Log("LOG", "debugSystem.Log('LOG')");
     this.testObject = new SpriteAnimation(resourcePreLoader.GetImage("walk.png"), 125, 167, 4, 4);
 
     return this;
 }
-TestState.prototype.Render = function(){
-    var theCanvas = document.getElementById("GameCanvas");
-    var Context = theCanvas.getContext("2d");
-
-    this.testObject.Render(Context);
-}
-TestState.prototype.Update = function(){
-    this.testObject.Update();
-}
-
 
 function onPageLoadComplete(){    
     setInterval(gameLoop, 1000/GAME_FPS);
@@ -40,7 +26,6 @@ function onPageLoadComplete(){
     soundSystem.AddSound("test_long.mp3");
 
     var img_walk = resourcePreLoader.GetImage("walk.png");
-    var img_run = resourcePreLoader.GetImage("rund.png");
 
     //게임 초기 시작 상태 설정
     game_state = new LoadingState();
@@ -70,6 +55,9 @@ function ChangeGameState(nextGameState){
 function Update(){
     //업데이트
     game_state.Update();
+
+    //배포 시에는 아래 코드를 주석 처리하거나 삭제하면 개발 버전 전환 기능 해제
+    debugSystem.UseDebugMode();
 }
 
 function Render(){
@@ -80,14 +68,16 @@ function Render(){
     Context.fillStyle = '#000000';
     Context.fillRect(0, 0, 800, 600);
 
-    Context.fillStyle = '#ffffff';
-    Context.font = '15px Arial';
-    Context.textBaseline = 'top';
-
     game_state.Render();
 
-    //FPS 표시
-    Context.fillText("fps : " + frameCounter.Lastfps, 10, 10);
+    if(debugSystem.debug){
+        //FPS 표시
+        Context.fillStyle = '#ffffff';
+        Context.font = '15px Arial';
+        Context.textBaseline = 'top';
+        Context.fillText("fps : " + frameCounter.Lastfps, 10, 10);
+    }
+    
 }
 
 function gameLoop(){
