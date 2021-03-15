@@ -9,27 +9,30 @@ function SpriteAnimation(img, width, height, totalFrameCount, fps){
     this.totalFrameCount = totalFrameCount;
     this.currentFrame = 0;
 
-    this.updateFrame = fps / GAME_FPS;
+    // this.updateFrame = fps / GAME_FPS;
+    this.animationTimer = new Timer();
+    this.fps = fps;
 
     return this;
 }
 
+SpriteAnimation.prototype.Update = function(context){
+    // this.animationTimer.Update();
+    if(this.animationTimer.nowFrame > 1000/this.fps){
+        this.currentFrame++;
+        if(this.currentFrame >= this.totalFrameCount)
+            this.currentFrame = 0;
+        this.animationTimer.Reset();
+    }
+}
+
 SpriteAnimation.prototype.Render = function(context){
-    /* void ctx.drawImage(image, sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight); */
     context.drawImage(this.img
-        // , this.width * this.currentFrame, 0
-        , this.width * Math.floor(this.currentFrame), 0
+        , this.width * this.currentFrame, 0
         , this.width, this.height
         , this.x, this.y
         , this.width, this.height
     );
-}
-
-SpriteAnimation.prototype.Update = function(context){
-    // this.currentFrame++;
-    this.currentFrame += this.updateFrame;
-    if(this.currentFrame >= this.totalFrameCount)
-        this.currentFrame = 0;
 }
 
 SpriteAnimation.prototype.Translate = function(x, y){

@@ -8,13 +8,20 @@ var game_state;
 
 //테스트용 임시 상태
 function TestState(){
-    this.timer = new Timer();
+    resourcePreLoader.AddImage("walk.png");
+    this.testObject = new SpriteAnimation(resourcePreLoader.GetImage("walk.png"),
+        125, 167, 4, 4);
     return this;
 }
-TestState.prototype.Update = function(){
-    this.timer.Update();
-    debugSystem.Log("LOG", this.timer.nowFrame);
+TestState.prototype.Render = function(){
+    var theCanvas = document.getElementById("GameCanvas");
+    var Context = theCanvas.getContext("2d");
+    this.testObject.Render(Context);
 }
+TestState.prototype.Update = function(){
+    this.testObject.Update();
+}
+
 
 function onPageLoadComplete(){    
     setInterval(gameLoop, 1000/GAME_FPS);
@@ -54,6 +61,9 @@ function ChangeGameState(nextGameState){
 }
 
 function Update(){
+    //타이머 업데이트
+    timerSystem.Update();
+
     //업데이트
     game_state.Update();
 
@@ -71,7 +81,7 @@ function Render(){
 
     game_state.Render();
 
-    if(debugSystem.debug){
+    if(debugSystem.debugMode){
         //FPS 표시
         Context.fillStyle = '#ffffff';
         Context.font = '15px Arial';

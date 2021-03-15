@@ -70,7 +70,7 @@ function Render(){
 
     game_state.Render();
 
-    if(debugSystem.debug){
+    if(debugSystem.debugMode){
         //FPS 표시
         Context.fillStyle = '#ffffff';
         Context.font = '15px Arial';
